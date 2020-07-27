@@ -18,42 +18,42 @@ const main = async (nomeCampeonato) => {
         let times
         try {
             await page.evaluate((seletor) => {
-            let arr = []
-            document.querySelectorAll(seletor)
-                .forEach(e => {
-                    arr.push(e.innerHTML)
-                })
-            return arr
+                let arr = []
+                document.querySelectorAll(seletor)
+                    .forEach(e => {
+                        arr.push(e.innerHTML)
+                    })
+                return arr
 
-        }, seletor)
+            }, seletor)
         } catch (error) {
             console.log('erro')
             return null
         }
-        
-         return times
+
+        return times
     }
 
     async function capturarPontos() {
         let arrayPontos = []
         try {
             for (let i = 1; i <= 20; i++) {
-            let a = await page.evaluate((i) => {
-                let temp = []
-                document.querySelectorAll(`#classificacao__wrapper > article > section.tabela.tabela__pontos-corridos > div > table.tabela__pontos > tbody > tr:nth-child(${i}) > td`)
-                    .forEach(el => {
-                        temp.push(el.innerHTML)
-                    })
-                return temp
-            }, i)
+                let a = await page.evaluate((i) => {
+                    let temp = []
+                    document.querySelectorAll(`#classificacao__wrapper > article > section.tabela.tabela__pontos-corridos > div > table.tabela__pontos > tbody > tr:nth-child(${i}) > td`)
+                        .forEach(el => {
+                            temp.push(el.innerHTML)
+                        })
+                    return temp
+                }, i)
 
-            arrayPontos.push(a)
-        }
+                arrayPontos.push(a)
+            }
         } catch (error) {
             console.log('erro')
             return null
         }
-        
+
         return arrayPontos
     }
 
@@ -74,39 +74,40 @@ const main = async (nomeCampeonato) => {
 
     async function montar() {
 
-        const callback = async (resolve,reject)=>{
-        let times = await capturar('#classificacao__wrapper > article > section.tabela.tabela__pontos-corridos > div > table.tabela__equipes.tabela__equipes--com-borda > tbody > tr > td.classificacao__equipes.classificacao__equipes--time > strong')
+        const callback = async (resolve, reject) => {
+            let times = await capturar('#classificacao__wrapper > article > section.tabela.tabela__pontos-corridos > div > table.tabela__equipes.tabela__equipes--com-borda > tbody > tr > td.classificacao__equipes.classificacao__equipes--time > strong')
 
-        let arrayPontos = await capturarPontos()
+            let arrayPontos = await capturarPontos()
 
-        if(!times || !arrayPontos){
-            reject(null)
-            return
-        }
-        
-        for (let i = 1; i <= 20; i++) {
-            campeonato[i] = {
-                time: times[i - 1],
-                pontos: arrayPontos[i - 1][0],
-                jogos: arrayPontos[i - 1][1],
-                vitorias: arrayPontos[i - 1][2],
-                empates: arrayPontos[i - 1][3],
-                derrotas: arrayPontos[i - 1][4],
-                gp: arrayPontos[i - 1][5],
-                gc: arrayPontos[i - 1][6],
-                sg: arrayPontos[i - 1][7],
-                aproveitamento: arrayPontos[i - 1][8]
+            await browser.close()
+
+            if (!times || !arrayPontos) {
+                reject(null)
+                return
             }
+
+            for (let i = 1; i <= 20; i++) {
+                campeonato[i] = {
+                    time: times[i - 1],
+                    pontos: arrayPontos[i - 1][0],
+                    jogos: arrayPontos[i - 1][1],
+                    vitorias: arrayPontos[i - 1][2],
+                    empates: arrayPontos[i - 1][3],
+                    derrotas: arrayPontos[i - 1][4],
+                    gp: arrayPontos[i - 1][5],
+                    gc: arrayPontos[i - 1][6],
+                    sg: arrayPontos[i - 1][7],
+                    aproveitamento: arrayPontos[i - 1][8]
+                }
+            }
+            resolve(campeonato)
         }
-        await browser.close()
-        resolve(campeonato)
-    }
 
         return new Promise(callback)
     }
 
     return montar()
-    
+
 }
 
 

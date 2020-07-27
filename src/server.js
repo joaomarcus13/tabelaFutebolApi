@@ -3,6 +3,7 @@ const app = express()
 const mongoose = require('mongoose')
 const cors = require('cors')
 const tabelaController = require('./controllers/tabelaController')
+const jogosController = require('./controllers/jogosController')
 require('dotenv').config({ path: '../.env' })
 //
 
@@ -19,7 +20,8 @@ app.use((req, res, next) => {
 })
 
 
-app.get('/:nomeCampeonato',tabelaController )
+app.get('/tabela/:nomeCampeonato',tabelaController )
+app.get('/jogos/:nomeCampeonato',jogosController )
 
 
 app.listen(3000, () => {

@@ -1,6 +1,6 @@
 const puppeter = require('puppeteer')
 
-async function main(nomeCampeonato, n_rodada=false) {
+async function main(nomeCampeonato, n_rodada = false) {
     const url = nomeCampeonato === 'brasileiro' ?
         'https://globoesporte.globo.com/futebol/brasileirao-serie-a/' :
         `https://globoesporte.globo.com/futebol/futebol-internacional/futebol-${nomeCampeonato}/`
@@ -11,19 +11,19 @@ async function main(nomeCampeonato, n_rodada=false) {
 
 
     async function capturarRodada() {
-        let rodada,seta,sub
+        let rodada, seta, sub
         try {
-            while(true) {
+            while (true) {
                 rodada = await page.$eval('span.lista-jogos__navegacao--rodada', (a) => a.innerHTML)
-                sub = rodada.substring(0,2)
-                if(!n_rodada || Number(sub) === Number(n_rodada) )
+                sub = rodada.substring(0, 2)
+                if (!n_rodada || Number(sub) === Number(n_rodada))
                     break
-                seta = Number(sub) > Number(n_rodada)?'esquerda':'direita'
+                seta = Number(sub) > Number(n_rodada) ? 'esquerda' : 'direita'
                 await page.click(`.lista-jogos__navegacao--setas.lista-jogos__navegacao--seta-${seta}.lista-jogos__navegacao--setas-ativa`)
                 await page.waitFor(500)
-            } ;
+            };
         } catch (error) {
-            console.log(error)
+            //console.log(error)
             return null
         }
 
@@ -70,25 +70,35 @@ async function main(nomeCampeonato, n_rodada=false) {
                 return obj
             })
         } catch (error) {
-            console.log(error)
+            //console.log('error')
             return null
         }
         return placar
     }
 
     async function montar() {
-        const obj = {}
-        let rodada = await capturarRodada()
-        const jogos = await capturarJogos()
-        await browser.close()
-        obj[rodada] = jogos
-        return obj
+        const callback = async (resolve, reject) => {
+            const obj = {}
+            const rodada = await capturarRodada()
+            const jogos = await capturarJogos()
+            await browser.close()
+
+            if(!rodada || !jogos){
+                reject(null)
+                return
+            }
+
+            obj[rodada] = jogos
+            resolve(obj)
+        }
+        return new Promise(callback)
     }
 
     return montar()
 
 }
 
-console.log(seta)
+module.exports = main
 
-main('italiano','34').then(console.log).catch(console.log)
+//main('italiano', '34').then(console.log).catch(()=>{console.log('erro')})
+
