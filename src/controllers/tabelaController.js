@@ -39,7 +39,8 @@ module.exports = async (req, res) => {
                 await gravarDB(req.params.nomeCampeonato, e)
                 return res.json(e)
             })
-            .catch(()=>{
+            .catch((e)=>{
+                console.log(e)
                 return res.json('dados nao disponiveis')
             })
     }

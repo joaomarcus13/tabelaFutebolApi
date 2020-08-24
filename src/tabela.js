@@ -17,7 +17,7 @@ const main = async (nomeCampeonato) => {
     async function capturar(seletor) {
         let times
         try {
-            await page.evaluate((seletor) => {
+            times = await page.evaluate((seletor) => {
                 let arr = []
                 document.querySelectorAll(seletor)
                     .forEach(e => {
@@ -27,7 +27,7 @@ const main = async (nomeCampeonato) => {
 
             }, seletor)
         } catch (error) {
-            console.log('erro')
+            console.log(error,'erro')
             return null
         }
 
@@ -50,7 +50,7 @@ const main = async (nomeCampeonato) => {
                 arrayPontos.push(a)
             }
         } catch (error) {
-            console.log('erro')
+            console.log(error,'erro')
             return null
         }
 
@@ -81,6 +81,7 @@ const main = async (nomeCampeonato) => {
 
             await browser.close()
 
+            //console.log(times)
             if (!times || !arrayPontos) {
                 reject(null)
                 return
@@ -112,5 +113,7 @@ const main = async (nomeCampeonato) => {
 
 
 module.exports = main
-
-//main('brasileiro', true).then(e=>{console.log(e)})
+/* 
+main('brasileiro', true)
+.then(e=>{console.log(e)})
+.catch(e=>{console.log(e)}) */

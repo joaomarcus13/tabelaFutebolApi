@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 const cors = require('cors')
 const tabelaController = require('./controllers/tabelaController')
 const jogosController = require('./controllers/jogosController')
-require('dotenv').config({ path: '../.env' })
+require('dotenv').config()
 //
 
 mongoose.connect(process.env.MONGO_STRING, { useNewUrlParser: true, useUnifiedTopology: true })
