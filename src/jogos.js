@@ -16,6 +16,9 @@ async function main(nomeCampeonato, n_rodada = false) {
             while (true) {
                 rodada = await page.$eval('span.lista-jogos__navegacao--rodada', (a) => a.innerHTML)
                 sub = rodada.substring(0, 2)
+                if(sub.substring(1) === 'ª')
+                    sub = sub.substring(0,1)
+             
                 if (!n_rodada || Number(sub) === Number(n_rodada))
                     break
                 seta = Number(sub) > Number(n_rodada) ? 'esquerda' : 'direita'
@@ -34,7 +37,8 @@ async function main(nomeCampeonato, n_rodada = false) {
         let placar
         try {
             placar = await page.evaluate(() => {
-                let info = [], arrMandante = [], arrVisitante = [], arrPlacarMandante = [], arrPlacarVisitante = []
+                let info = [], arrMandante = [], arrVisitante = [], arrPlacarMandante = [], arrPlacarVisitante = [], 
+                arrEscudoMandante = [], arrEscudoVisitante = []
                 document.querySelectorAll(".jogo__informacoes").forEach(el => {
                     const arr = []
                     for (let i = 0; i < 3; i++) {
@@ -55,6 +59,13 @@ async function main(nomeCampeonato, n_rodada = false) {
                 document.querySelectorAll('.placar-box__valor.placar-box__valor--visitante').forEach(el => {
                     arrPlacarVisitante.push(el.innerText)
                 })
+                document.querySelectorAll('.equipes__escudo--mandante').forEach(el => {
+                    arrEscudoMandante.push(el.src)
+                })
+                document.querySelectorAll('.equipes__escudo--visitante').forEach(el => {
+                    arrEscudoVisitante.push(el.src)
+                })
+                
                 const obj = []
                 for (i = 0; i < 10; i++) {
                     obj.push({
@@ -62,6 +73,8 @@ async function main(nomeCampeonato, n_rodada = false) {
                         golMandante: arrPlacarMandante[i],
                         visitante: arrVisitante[i],
                         golVisitante: arrPlacarVisitante[i],
+                        escudoMandante: arrEscudoMandante[i],
+                        escudoVisitante: arrEscudoVisitante[i],
                         data: info[i][0],
                         local: info[i][1],
                         horario: info[i][2]
@@ -98,7 +111,8 @@ async function main(nomeCampeonato, n_rodada = false) {
 
 }
 
+
 module.exports = main
 
-//main('italiano', '34').then(console.log).catch(()=>{console.log('erro')})
+//main('brasileiro').then(console.log).catch(()=>{console.log('erro')})
 
