@@ -23,7 +23,7 @@ async function main(nomeCampeonato, n_rodada = false) {
                     break
                 seta = Number(sub) > Number(n_rodada) ? 'esquerda' : 'direita'
                 await page.click(`.lista-jogos__navegacao--setas.lista-jogos__navegacao--seta-${seta}.lista-jogos__navegacao--setas-ativa`)
-                await page.waitFor(500)
+                await page.waitFor(800)
             };
         } catch (error) {
             //console.log(error)
@@ -47,24 +47,33 @@ async function main(nomeCampeonato, n_rodada = false) {
                     info.push(arr)
                 })
 
-                document.querySelectorAll('.placar__equipes.placar__equipes--mandante').forEach(el => {
+                /* document.querySelectorAll('.placar__equipes.placar__equipes--mandante').forEach(el => {
                     arrMandante.push(el.children[2].innerText)
-                })
-                document.querySelectorAll('.placar__equipes.placar__equipes--visitante').forEach(el => {
+                }) */
+                document.querySelectorAll('div.placar__equipes.placar__equipes--mandante > span.equipes__sigla').forEach(el => {
+                    arrMandante.push(el.innerText)})
+                    
+                /* document.querySelectorAll('.placar__equipes.placar__equipes--visitante').forEach(el => {
                     arrVisitante.push(el.children[3].innerText)
+                }) */
+
+                document.querySelectorAll('div.placar__equipes.placar__equipes--visitante > span.equipes__sigla').forEach(el => {
+                    arrVisitante.push(el.innerText)
                 })
+
+
                 document.querySelectorAll('.placar-box__valor.placar-box__valor--mandante').forEach(el => {
                     arrPlacarMandante.push(el.innerText)
                 })
                 document.querySelectorAll('.placar-box__valor.placar-box__valor--visitante').forEach(el => {
                     arrPlacarVisitante.push(el.innerText)
                 })
-                document.querySelectorAll('.equipes__escudo--mandante').forEach(el => {
+                /* document.querySelectorAll('.equipes__escudo--mandante').forEach(el => {
                     arrEscudoMandante.push(el.src)
                 })
                 document.querySelectorAll('.equipes__escudo--visitante').forEach(el => {
                     arrEscudoVisitante.push(el.src)
-                })
+                }) */
                 
                 const obj = []
                 for (i = 0; i < 10; i++) {

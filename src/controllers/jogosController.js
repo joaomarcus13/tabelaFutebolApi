@@ -18,30 +18,34 @@ module.exports = async (req,res)=>{
     let n_rodada  = req.query.n_rodada ?  `${req.query.n_rodada}ª RODADA` : false
     const refresh = req.query.refresh === 'true' ? true : false
 
+    //console.log('rodada ',n_rodada,  ' query ', req.query.n_rodada)
+
     if(!refresh){
+        
         const rodada = await verificarDB(campeonato,n_rodada)
+        
         if (rodada) {
             console.log('no cache')
             //console.log(rodada)
             return res.json(JSON.parse(rodada.informacoes))
         } else {
-            jogos(campeonato,n_rodada)
+            jogos(campeonato,req.query.n_rodada)
                 .then(async (e) => {
                     await gravarDB(campeonato,Object.keys(e)[0], e)
                     return res.json(e)
                 })
                 .catch(()=>{
-                    return res.json('dados nao disponiveis')
+                    return res.status(500).json('dados nao disponiveis')
                 })
         }
     }else{
-        jogos(campeonato,n_rodada)
+        jogos(campeonato,req.query.n_rodada)
             .then(async (e) => {
                 await gravarDB(campeonato,Object.keys(e)[0], e)
                 return res.json(e)
             })
             .catch(()=>{
-                return res.json('dados nao disponiveis')
+                return res.status(500).json('dados nao disponiveis')
             })
     }
     
