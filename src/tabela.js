@@ -87,7 +87,7 @@ const main = async (nomeCampeonato) => {
                 return
             }
 
-            for (let i = 1; i <= 20; i++) {
+            for (let i = 1; i <= times.length; i++) {
                 campeonato[i] = {
                     time: times[i - 1],
                     pontos: arrayPontos[i - 1][0],

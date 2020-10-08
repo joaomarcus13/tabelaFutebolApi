@@ -76,7 +76,7 @@ async function main(nomeCampeonato, n_rodada = false) {
                 }) */
                 
                 const obj = []
-                for (i = 0; i < 10; i++) {
+                for (i = 0; i < info.length; i++) {
                     obj.push({
                         mandante: arrMandante[i],
                         golMandante: arrPlacarMandante[i],
@@ -123,5 +123,5 @@ async function main(nomeCampeonato, n_rodada = false) {
 
 module.exports = main
 
-//main('brasileiro').then(console.log).catch(()=>{console.log('erro')})
+//main('brasileiro').then(console.log).catch((e)=>{console.log('erro: ',e)})
 
