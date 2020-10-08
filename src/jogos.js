@@ -5,12 +5,12 @@ async function main(nomeCampeonato, n_rodada = false) {
         'https://globoesporte.globo.com/futebol/brasileirao-serie-a/' :
         `https://globoesporte.globo.com/futebol/futebol-internacional/futebol-${nomeCampeonato}/`
 
-    const browser = await puppeter.launch({ headless: true })
-    const page = await browser.newPage()
-    await page.goto(url, { waitUntil: "load",args: [
+    const browser = await puppeter.launch({ headless: true ,args: [
         '--no-sandbox',
         '--disable-setuid-sandbox',
       ], })
+    const page = await browser.newPage()
+    await page.goto(url, { waitUntil: "load" })
 
 
     async function capturarRodada() {
