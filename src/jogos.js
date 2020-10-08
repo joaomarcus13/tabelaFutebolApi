@@ -7,7 +7,10 @@ async function main(nomeCampeonato, n_rodada = false) {
 
     const browser = await puppeter.launch({ headless: true })
     const page = await browser.newPage()
-    await page.goto(url, { waitUntil: "load" })
+    await page.goto(url, { waitUntil: "load",args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+      ], })
 
 
     async function capturarRodada() {

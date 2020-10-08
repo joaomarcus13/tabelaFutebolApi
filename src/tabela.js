@@ -10,7 +10,10 @@ const main = async (nomeCampeonato) => {
         `../tables/futebol-${nomeCampeonato}.json` */
 
     const campeonato = {}
-    const browser = await puppeteer.launch({ headless: true })
+    const browser = await puppeteer.launch({ headless: true, args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+      ], })
     const page = await browser.newPage()
     await page.goto(url, { waitUntil: "load" })
 
