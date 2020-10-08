@@ -38,7 +38,7 @@ async function main(nomeCampeonato, n_rodada = false) {
         try {
             placar = await page.evaluate(() => {
                 let info = [], arrMandante = [], arrVisitante = [], arrPlacarMandante = [], arrPlacarVisitante = [], 
-                arrEscudoMandante = [], arrEscudoVisitante = []
+                arrVejaComoFoi = []
                 document.querySelectorAll(".jogo__informacoes").forEach(el => {
                     const arr = []
                     for (let i = 0; i < 3; i++) {
@@ -68,12 +68,11 @@ async function main(nomeCampeonato, n_rodada = false) {
                 document.querySelectorAll('.placar-box__valor.placar-box__valor--visitante').forEach(el => {
                     arrPlacarVisitante.push(el.innerText)
                 })
-                /* document.querySelectorAll('.equipes__escudo--mandante').forEach(el => {
-                    arrEscudoMandante.push(el.src)
+
+                 document.querySelectorAll('.jogo__transmissao--link').forEach(el => {
+                    arrVejaComoFoi.push(el.href)
                 })
-                document.querySelectorAll('.equipes__escudo--visitante').forEach(el => {
-                    arrEscudoVisitante.push(el.src)
-                }) */
+                
                 
                 const obj = []
                 for (i = 0; i < info.length; i++) {
@@ -82,17 +81,18 @@ async function main(nomeCampeonato, n_rodada = false) {
                         golMandante: arrPlacarMandante[i],
                         visitante: arrVisitante[i],
                         golVisitante: arrPlacarVisitante[i],
-                        escudoMandante: arrEscudoMandante[i],
-                        escudoVisitante: arrEscudoVisitante[i],
+                        //escudoMandante: arrEscudoMandante[i],
+                        //escudoVisitante: arrEscudoVisitante[i],
                         data: info[i][0],
                         local: info[i][1],
-                        horario: info[i][2]
+                        horario: info[i][2],
+                        vejacomofoi: arrVejaComoFoi[i] || ""
                     })
                 }
                 return obj
             })
         } catch (error) {
-            //console.log('error')
+            //console.log('error',error)
             return null
         }
         return placar
@@ -104,6 +104,7 @@ async function main(nomeCampeonato, n_rodada = false) {
             const rodada = await capturarRodada()
             const jogos = await capturarJogos()
             await browser.close()
+
 
             if(!rodada || !jogos){
                 reject(null)
