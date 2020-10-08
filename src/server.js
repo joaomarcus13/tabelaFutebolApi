@@ -13,15 +13,21 @@ mongoose.connect(process.env.MONGO_STRING, { useNewUrlParser: true, useUnifiedTo
 
 mongoose.set('useFindAndModify', false);
 
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*")
-    app.use(cors())
+//app.use((req, res, next) => {
+    //res.header("Access-Control-Allow-Origin", "http://localhost:192.168.0.100")
+    //app.use(cors({origin:'localhost:192.168.0.100'}))
+  //  next()
+//})
+
+function verify(req,res,next){
+    if(req.headers['token'] != process.env.TOKEN || !req.headers['token'])
+        return res.status(403).send("acesso negado")
+    
     next()
-})
+}
 
-
-app.get('/tabela/:nomeCampeonato',tabelaController )
-app.get('/jogos/:nomeCampeonato',jogosController )
+app.get('/tabela/:nomeCampeonato',verify,tabelaController )
+app.get('/jogos/:nomeCampeonato',verify,jogosController )
 
 
 app.listen(3000, () => {
